@@ -3,7 +3,7 @@
 
 """
 @author: Jing Guo
-@time  : 12/26/17
+@time  : 1/27/17
 """
 import os
 import sys
@@ -31,7 +31,6 @@ class Configure(object):
     x_train_path = '../input/x_train.pkl'
     y_train_path = '../input/y_train.pkl'
     x_test_path = '../input/x_test.pkl'
-    test_fname_path = '../input/test_fname.pkl'
     
     outlierNameList = '../input/outlierNameList.pkl'
 
