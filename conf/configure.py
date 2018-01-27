@@ -25,12 +25,9 @@ class Configure(object):
     cleaned_x_train_path = '../input/cleaned_x_train.pkl'
     cleaned_y_train_path = '../input/cleaned_y_train.pkl'
     
-    processed_train_path = '../input/train_dataset.pkl'
-    processed_test_path = '../input/test_dataset.pkl'
-    
-    x_train_path = '../input/x_train.pkl'
-    y_train_path = '../input/y_train.pkl'
-    x_test_path = '../input/x_test.pkl'
+    processed_x_train_path = '../input/processed_x_train.pkl'
+    processed_y_train_path = '../input/processed_y_train.pkl'
+    processed_x_test_path = '../input/processed_x_test.pkl'
     
     outlierNameList = '../input/outlierNameList.pkl'
 

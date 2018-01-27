@@ -19,8 +19,5 @@ os.system(cmd)
 cmd = 'rm ../input/*test.pkl'
 os.system(cmd)
 
-cmd = 'python initialTransform.py'
-os.system(cmd)
-
-cmd = 'python initialTransform_cleaned.py'
+cmd = 'python tokenization.py'
 os.system(cmd)
