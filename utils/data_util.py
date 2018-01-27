@@ -17,37 +17,24 @@ import pandas as pd
 from conf.configure import Configure
 
 
-def load_train():
-    if not os.path.exists(Configure.cleaned_x_train_path):
+def load_dataset():
+    if not os.path.exists(Configure.processed_x_train_path):
         with open(Configure.x_train_path, "rb") as f:
             x_train = pickle.load(f)
 #             x_train = cPickle.load(f)
-        with open(Configure.y_train_path, "rb") as f:
-            y_train = pickle.load(f)
+        with open(Configure.x_test_path, "rb") as f:
+            x_test = pickle.load(f)
 #             y_train = cPickle.load(f)
     else:
-        with open(Configure.cleaned_x_train_path, "rb") as f:
+        with open(Configure.processed_x_train_path, "rb") as f:
             x_train = pickle.load(f)
-        with open(Configure.cleaned_y_train_path, "rb") as f:
+        with open(Configure.processed_y_train_path, "rb") as f:
             y_train = pickle.load(f)
+        with open(Configure.processed_x_test_path, "rb") as f:
+            x_test = pickle.load(f)
     
-    print('x_train:', x_train.shape, ', y_train:', y_train.shape)
-    return x_train, y_train
-
-def load_test(xTest = True):
-    with open(Configure.test_fname_path, "rb") as f:
-        test_fname = pickle.load(f)
-    
-    if xTest:
-        if not os.path.exists(Configure.processed_test_path):
-            with open(Configure.x_test_path, "rb") as f:
-                x_test = pickle.load(f)
-
-        print('x_test:', x_test.shape, ', test_fname:', len(test_fname))
-        return x_test, test_fname 
-    
-    print('test_fname:', len(test_fname))
-    return test_fname 
+    print('x_train:', x_train.shape, ', y_train:', y_train.shape, ', x_test:', x_test.shape)
+    return x_train, y_train. x_test
 
 def save_processed_dataset(x_train, y_train, x_test=None):
     if x_train is not None:
