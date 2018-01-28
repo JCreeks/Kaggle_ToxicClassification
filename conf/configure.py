@@ -16,8 +16,8 @@ import time
 
 class Configure(object):
 
-    model_path = '../model'
-    x_train_data_path = '../input/train.csv'
+    model_path = '../models/savedModels'
+    train_data_path = '../input/train.csv'
     x_test_data_path = '../input/test.csv'
     
     embedding_path = '../input/crawl-300d-2M.vec'

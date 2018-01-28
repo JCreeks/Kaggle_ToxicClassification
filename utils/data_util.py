@@ -16,15 +16,23 @@ import pickle
 import pandas as pd
 from conf.configure import Configure
 
+def max_len():
+    return 500
 
 def load_dataset():
     if not os.path.exists(Configure.processed_x_train_path):
-        with open(Configure.x_train_path, "rb") as f:
-            x_train = pickle.load(f)
-#             x_train = cPickle.load(f)
-        with open(Configure.x_test_path, "rb") as f:
-            x_test = pickle.load(f)
-#             y_train = cPickle.load(f)
+        maxlen = max_len()
+        with open(Configure.train_data_path, "rb") as f:
+            train = pickle.load(f)
+            list_sentences_train = train["comment_text"].fillna("CVxTz").values
+            list_classes = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
+            y_train = train[list_classes].values
+            list_sentences_test = test["comment_text"].fillna("CVxTz").values
+            x_train = sequence.pad_sequences(list_tokenized_train, maxlen=maxlen)
+
+        with open(Configure.x_test_data_path, "rb") as f:
+            test = pickle.load(f)
+            x_test = sequence.pad_sequences(list_tokenized_test, maxlen=maxlen)
     else:
         with open(Configure.processed_x_train_path, "rb") as f:
             x_train = pickle.load(f)
@@ -34,7 +42,7 @@ def load_dataset():
             x_test = pickle.load(f)
     
     print('x_train:', x_train.shape, ', y_train:', y_train.shape, ', x_test:', x_test.shape)
-    return x_train, y_train. x_test
+    return x_train, y_train, x_test
 
 def save_processed_dataset(x_train, y_train, x_test=None):
     if x_train is not None:
