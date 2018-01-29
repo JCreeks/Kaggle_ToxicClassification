@@ -17,10 +17,12 @@ import time
 class Configure(object):
 
     model_path = '../models/savedModels'
+    output_path = '../output'
     train_data_path = '../input/train.csv'
     x_test_data_path = '../input/test.csv'
     
     embedding_path = '../input/crawl-300d-2M.vec'
+    embedding_matrix = '../input/embedding_matrix.pkl'
     
     cleaned_x_train_path = '../input/cleaned_x_train.pkl'
     cleaned_y_train_path = '../input/cleaned_y_train.pkl'

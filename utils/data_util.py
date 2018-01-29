@@ -59,6 +59,18 @@ def save_processed_dataset(x_train, y_train, x_test=None):
         with open(Configure.processed_x_test_path, "wb") as f:
             pickle.dump(x_test, f, -1)
 #             cPickle.dump(x_test, f, -1)
+
+def save_embedding_matrix(embedding_matrix):
+    if embedding_matrix is not None:
+        with open(Configure.embedding_matrix, "wb") as f:
+            pickle.dump(embedding_matrix, f, -1)
+            
+def load_embedding_matrix():
+    if os.path.exists(Configure.embedding_matrix):
+        with open(Configure.embedding_matrix, "rb") as f:
+            embedding_matrix = pickle.load(f)
+        return embedding_matrix
+    return None
             
 def save_cleaned_dataset(x_train, y_train):
     if x_train is not None:
