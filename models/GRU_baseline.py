@@ -6,7 +6,7 @@ sys.path.append(module_path)
 
 from conf.configure import Configure as conf
 from utils import data_util
-from utils.train_utils import train_folds
+from utils.GRUtrain_utils import train_folds
 from utils.data_util import max_len
 
 import numpy as np # linear algebra
@@ -47,8 +47,10 @@ def get_model(embedding_matrix, sequence_length, dropout_rate, recurrent_units, 
     embedding_layer = Embedding(embedding_matrix.shape[0], embedding_matrix.shape[1],
                                 weights=[embedding_matrix], trainable=False)(input_layer)
     x = Bidirectional(GRU(recurrent_units, return_sequences=True))(embedding_layer)
+#     x = Bidirectional(CuDNNGRU(recurrent_units, return_sequences=True))(embedding_layer)
     x = Dropout(dropout_rate)(x)
     x = Bidirectional(GRU(recurrent_units, return_sequences=False))(x)
+#     x = Bidirectional(CuDNNGRU(recurrent_units, return_sequences=False))(x)
     x = Dense(dense_size, activation="relu")(x)
     output_layer = Dense(6, activation="sigmoid")(x)
 
