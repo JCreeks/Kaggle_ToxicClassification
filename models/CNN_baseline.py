@@ -37,11 +37,11 @@ import gc
 
 from keras import backend as K
 import tensorflow as tf
-n_jobs=5
+n_jobs=4
 config = tf.ConfigProto(intra_op_parallelism_threads=n_jobs, 
                         inter_op_parallelism_threads=n_jobs, 
                         allow_soft_placement=True, 
-                        device_count = {'GPU': n_jobs})
+                        device_count = {'CPU': n_jobs})
 session = tf.Session(config=config)
 K.set_session(session)
 
@@ -58,7 +58,7 @@ filter_sizes = [3,4,5]
 num_filters = 512
 drop = 0.5
 
-epochs = 2
+epochs = 10
 batch_size = 30
 
 del embedding_matrix

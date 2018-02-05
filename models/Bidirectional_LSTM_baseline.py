@@ -56,7 +56,7 @@ epochs = 2
 modelName = 'maxFeat'+str(max_features)+'_bSize'+str(batch_size)+'_epoch'+str(epochs)+'_LSTM'+'.model'
 modelFile = os.path.join(Configure.model_path, modelName)
 # file_path="weights_base.best.hdf5"
-file_path="checkpoints/"+modelName+".hdf5"
+file_path="../models/checkpoints/"+modelName+".hdf5"
 
 if os.path.exists(file_path):
     model.load_weights(file_path)
