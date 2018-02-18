@@ -3,6 +3,7 @@ import numpy as np
 import os
 import sys
 import pandas as pd
+import re
 
 module_path = os.path.abspath(os.path.join('..'))
 sys.path.append(module_path)
@@ -15,11 +16,18 @@ from utils.clean_util import TextCleaner
 from utils.embedding_utils import read_embedding_list, clear_embedding_list, convert_tokens_to_ids
 from utils.data_util import max_len
 
+from utils.extra_utils import load_data, Embeds, Logger
+from nltk.tokenize import RegexpTokenizer
+from preprocessing import clean_text, convert_text2seq, get_embedding_matrix, split_data
+
 UNKNOWN_WORD = "_UNK_"
 END_WORD = "_END_"
 NAN_WORD = "_NAN_"
 sentences_length = max_len()
 remove_stop_words = True
+stem_words = True
+swear_words_fname = '../input/swear_words.csv'
+wrong_words_fname = '../input/correct_words.csv'
 
 CLASSES = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
 
@@ -30,8 +38,19 @@ def main():
     test_data = pd.read_csv(conf.x_test_data_path)
     
     print("Cleaning text...")
-    train_data["comment_text"] = train_data["comment_text"].apply(lambda x: TextCleaner.clean_text(x, remove_stop_words=remove_stop_words))
-    test_data["comment_text"] = test_data["comment_text"].apply(lambda x: TextCleaner.clean_text(x, remove_stop_words=remove_stop_words))
+    print("remove_stop_words ", remove_stop_words)
+    print("stem_words", stem_words)
+    train_data["comment_text"] = train_data["comment_text"].apply(lambda x: TextCleaner.clean_text(x, remove_stop_words=remove_stop_words, stem_words=stem_words))
+    test_data["comment_text"] = test_data["comment_text"].apply(lambda x: TextCleaner.clean_text(x, remove_stop_words=remove_stop_words, stem_words=stem_words))
+
+#     extra preprocessing
+#     print('extra cleaning...')
+#     swear_words = load_data(swear_words_fname, func=lambda x: set(x.T[0]), header=None)
+#     wrong_words_dict = load_data(wrong_words_fname, func=lambda x: {val[0] : val[1] for val in x})
+#     tokinizer = RegexpTokenizer(r'\w+')
+#     regexps = [re.compile("([a-zA-Z]+)([0-9]+)"), re.compile("([0-9]+)([a-zA-Z]+)")]
+#     train_data["comment_text"] = clean_text(train_data["comment_text"], tokinizer, wrong_words_dict, regexps)
+#     train_data["comment_text"] = clean_text(train_data["comment_text"], tokinizer, wrong_words_dict, regexps)
 
     list_sentences_train = train_data["comment_text"].fillna(NAN_WORD).values
     list_sentences_test = test_data["comment_text"].fillna(NAN_WORD).values

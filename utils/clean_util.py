@@ -9,6 +9,7 @@ import os
 import sys
 import re
 from string import punctuation
+from nltk.stem import SnowballStemmer
 
 stop_words = ['the', 'a', 'an', 'and', 'but', 'if', 'or', 'because', 'as', 'what', 'which', 'this', 'that', 'these',
               'those', 'then', 'just', 'so', 'than', 'such', 'both', 'through', 'about', 'for', 'is', 'of', 'while',

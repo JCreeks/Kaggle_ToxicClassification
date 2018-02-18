@@ -16,8 +16,8 @@ sys.path.append(module_path)
 cmd = 'rm ../output/subm*.csv'
 os.system(cmd)
 
-cmd = 'python GRU_baseline.py'
-os.system(cmd)
+# cmd = 'python GRU_baseline.py'
+# os.system(cmd)
 
-#cmd = 'python GS_CNN2.py'
-#os.system(cmd)
+cmd = 'python Bidirectional_LSTM_baseline.py'
+os.system(cmd)
