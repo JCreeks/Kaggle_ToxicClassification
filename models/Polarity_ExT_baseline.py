@@ -3,7 +3,8 @@ import sys
 
 module_path = os.path.abspath(os.path.join('../'))
 sys.path.append(module_path)
-from conf.configure import Configure as conf
+#from conf.configure import Configure as conf
+from configure import Configure as conf
 
 import numpy as np
 import pandas as pd
@@ -14,7 +15,7 @@ zpolarity = {0:'zero',1:'one',2:'two',3:'three',4:'four',5:'five',6:'six',7:'sev
 zsign = {-1:'negative',  0.: 'neutral', 1:'positive'}
 
 train = pd.read_csv(conf.train_data_path)
-test = pd.read_csv(conf.text_data_path)
+test = pd.read_csv(conf.x_test_data_path)
 sub1 = pd.read_csv('../input/submission_ensemble.csv')
 
 coly = [c for c in train.columns if c not in ['id','comment_text']]
