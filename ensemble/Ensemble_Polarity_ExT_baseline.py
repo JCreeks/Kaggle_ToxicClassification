@@ -16,14 +16,14 @@ zsign = {-1:'negative',  0.: 'neutral', 1:'positive'}
 
 train = pd.read_csv(conf.train_data_path)
 test = pd.read_csv(conf.x_test_data_path)
-sub1 = pd.read_csv('../input/submission_ensemble.csv')
+sub1 = pd.read_csv('../output/GRU_985.csv')
 
 coly = [c for c in train.columns if c not in ['id','comment_text']]
 y = train[coly]
 tid = test['id'].values
 
-train['polarity'] = train['comment_text'].map(lambda x: int(TextBlob(x).sentiment.polarity * 10))
-test['polarity'] = test['comment_text'].map(lambda x: int(TextBlob(x).sentiment.polarity * 10))
+train['polarity'] = train['comment_text'].map(lambda x: int(TextBlob(x.decode('utf8')).sentiment.polarity * 10))
+test['polarity'] = test['comment_text'].map(lambda x: int(TextBlob(x.decode('utf8')).sentiment.polarity * 10))
 
 train['comment_text'] = train.apply(lambda r: str(r['comment_text']) + ' polarity' +  zsign[np.sign(r['polarity'])] + zpolarity[np.abs(r['polarity'])], axis=1)
 test['comment_text'] = test.apply(lambda r: str(r['comment_text']) + ' polarity' +  zsign[np.sign(r['polarity'])] + zpolarity[np.abs(r['polarity'])], axis=1)
@@ -32,6 +32,7 @@ df = pd.concat([train['comment_text'], test['comment_text']], axis=0)
 df = df.fillna("unknown")
 nrow = train.shape[0]
 
+print("start vectorization...")
 tfidf = feature_extraction.text.TfidfVectorizer(stop_words='english', ngram_range=(1, 2), max_features=800000)
 data = tfidf.fit_transform(df)
 
@@ -46,6 +47,7 @@ sub2.columns = coly
 sub2['id'] = tid
 for c in coly:
     sub2[c] = sub2[c].clip(0+1e12, 1-1e12)
+sub2.to_csv('../output/polarity_ExT.csv', index=False)
 
 print('postprocessing...')
 #blend 1
