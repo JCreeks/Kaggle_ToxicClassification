@@ -12,6 +12,10 @@ from utils.data_util import max_len
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 
+from sklearn.metrics import roc_auc_score
+def AUC(y_true, y_pred):
+    return roc_auc_score(y_pred)
+
 # Input data files are available in the "../input/" directory.
 # For example, running this (by clicking run or pressing Shift+Enter) will list the files in the input directory
 
@@ -57,7 +61,7 @@ def get_model(embedding_matrix, sequence_length, dropout_rate, recurrent_units, 
     model = Model(inputs=input_layer, outputs=output_layer)
     model.compile(loss='binary_crossentropy',
                   optimizer=RMSprop(clipvalue=1, clipnorm=1),
-                  metrics=['accuracy'])
+                  metrics=['accuracy', AUC])
 
     return model
 
