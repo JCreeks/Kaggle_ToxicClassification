@@ -9,6 +9,9 @@ from utils import data_util
 from utils.GRUtrain_utils import train_folds
 from utils.data_util import max_len
 
+import warnings
+warnings.filterwarnings('ignore')
+
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 
@@ -20,7 +23,7 @@ def AUC(y_true, y_pred):
 # For example, running this (by clicking run or pressing Shift+Enter) will list the files in the input directory
 
 from subprocess import check_output
-print(check_output(["ls", "../input"]).decode("utf8"))
+# print(check_output(["ls", "../input"]).decode("utf8"))
 
 # Any results you write to the current directory are saved as output.
 
@@ -61,7 +64,7 @@ def get_model(embedding_matrix, sequence_length, dropout_rate, recurrent_units, 
     model = Model(inputs=input_layer, outputs=output_layer)
     model.compile(loss='binary_crossentropy',
                   optimizer=RMSprop(clipvalue=1, clipnorm=1),
-                  metrics=['accuracy', AUC])
+                  metrics=['accuracy'])
 
     return model
 

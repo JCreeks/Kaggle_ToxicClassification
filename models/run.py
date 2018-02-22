@@ -19,5 +19,5 @@ os.system(cmd)
 # cmd = 'python GRU_baseline.py'
 # os.system(cmd)
 
-cmd = 'python Bidirectional_LSTM_baseline.py'
+cmd = 'python Pooled_GRU_baseline.py'
 os.system(cmd)

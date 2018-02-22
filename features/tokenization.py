@@ -5,6 +5,9 @@ import sys
 import pandas as pd
 import re
 
+import warnings
+warnings.filterwarnings('ignore')
+
 module_path = os.path.abspath(os.path.join('..'))
 sys.path.append(module_path)
 
@@ -38,19 +41,21 @@ def main():
     test_data = pd.read_csv(conf.x_test_data_path)
     
     print("Cleaning text...")
+    train_data["comment_text"] = train_data["comment_text"].apply(TextCleaner.clean_text2)
+    test_data["comment_text"] = test_data["comment_text"].apply(TextCleaner.clean_text2)
     print("remove_stop_words ", remove_stop_words)
     print("stem_words", stem_words)
     train_data["comment_text"] = train_data["comment_text"].apply(lambda x: TextCleaner.clean_text(x, remove_stop_words=remove_stop_words, stem_words=stem_words))
     test_data["comment_text"] = test_data["comment_text"].apply(lambda x: TextCleaner.clean_text(x, remove_stop_words=remove_stop_words, stem_words=stem_words))
 
 #     extra preprocessing
-#     print('extra cleaning...')
-#     swear_words = load_data(swear_words_fname, func=lambda x: set(x.T[0]), header=None)
-#     wrong_words_dict = load_data(wrong_words_fname, func=lambda x: {val[0] : val[1] for val in x})
-#     tokinizer = RegexpTokenizer(r'\w+')
-#     regexps = [re.compile("([a-zA-Z]+)([0-9]+)"), re.compile("([0-9]+)([a-zA-Z]+)")]
-#     train_data["comment_text"] = clean_text(train_data["comment_text"], tokinizer, wrong_words_dict, regexps)
-#     train_data["comment_text"] = clean_text(train_data["comment_text"], tokinizer, wrong_words_dict, regexps)
+    print('extra cleaning...')
+    swear_words = load_data(swear_words_fname, func=lambda x: set(x.T[0]), header=None)
+    wrong_words_dict = load_data(wrong_words_fname, func=lambda x: {val[0] : val[1] for val in x})
+    tokinizer = RegexpTokenizer(r'\w+')
+    regexps = [re.compile("([a-zA-Z]+)([0-9]+)"), re.compile("([0-9]+)([a-zA-Z]+)")]
+    train_data["comment_text"] = clean_text(train_data["comment_text"], tokinizer, wrong_words_dict, regexps)
+    train_data["comment_text"] = clean_text(train_data["comment_text"], tokinizer, wrong_words_dict, regexps)
 
     list_sentences_train = train_data["comment_text"].fillna(NAN_WORD).values
     list_sentences_test = test_data["comment_text"].fillna(NAN_WORD).values
