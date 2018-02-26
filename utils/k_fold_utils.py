@@ -8,6 +8,7 @@ def _train_model(model, batch_size, train_x, train_y, val_x, val_y, metric = roc
     best_loss = -1
     best_weights = None
     best_epoch = 0
+    best_y_pred = val_y
 
     current_epoch = 0
 
@@ -29,6 +30,7 @@ def _train_model(model, batch_size, train_x, train_y, val_x, val_y, metric = roc
             best_loss = total_loss
             best_weights = model.get_weights()
             best_epoch = current_epoch
+            best_y_pred = y_pred
         else:
             if current_epoch - best_epoch == 5:
                 break
@@ -36,7 +38,7 @@ def _train_model(model, batch_size, train_x, train_y, val_x, val_y, metric = roc
     model.set_weights(best_weights)
     total_score = 0
     for j in range(6):
-        score = metric(val_y[:, j], y_pred[:, j])
+        score = metric(val_y[:, j], best_y_pred[:, j])
         total_score += score
     total_score /= 6.
     print('###################')
