@@ -1,0 +1,19 @@
+##############
+clean:  True
+##############
+Traceback (most recent call last):
+  File "XGB_baseline.py", line 178, in <module>
+    trials = trials)
+  File "XGB_baseline.py", line 168, in opt
+    best = fmin(score, space, algo=tpe.suggest, max_evals=evals, trials = trials)
+  File "/home/ubuntu/anaconda3/lib/python3.6/site-packages/hyperopt/fmin.py", line 307, in fmin
+    return_argmin=return_argmin,
+  File "/home/ubuntu/anaconda3/lib/python3.6/site-packages/hyperopt/base.py", line 635, in fmin
+    return_argmin=return_argmin)
+  File "/home/ubuntu/anaconda3/lib/python3.6/site-packages/hyperopt/fmin.py", line 314, in fmin
+    pass_expr_memo_ctrl=pass_expr_memo_ctrl)
+  File "/home/ubuntu/anaconda3/lib/python3.6/site-packages/hyperopt/base.py", line 786, in __init__
+    pyll.toposort(self.expr)
+  File "/home/ubuntu/anaconda3/lib/python3.6/site-packages/hyperopt/pyll/base.py", line 715, in toposort
+    assert order[-1] == expr
+TypeError: 'generator' object is not subscriptable
