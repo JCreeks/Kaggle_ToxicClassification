@@ -28,7 +28,7 @@ END_WORD = "_END_"
 NAN_WORD = "_NAN_"
 sentences_length = max_len()
 remove_stop_words = True
-stem_words = True
+stem_words = False #True
 swear_words_fname = '../input/swear_words.csv'
 wrong_words_fname = '../input/correct_words.csv'
 

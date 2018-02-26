@@ -24,12 +24,19 @@ class Configure(object):
     embedding_path = '../input/crawl-300d-2M.vec'
     embedding_matrix = '../input/embedding_matrix.pkl'
     
+    glove_path = '../input/glove.42B.300d.txt'
+    glove_matrix = '../input/glove_matrix.pkl'
+    
     cleaned_x_train_path = '../input/cleaned_x_train.pkl'
     cleaned_y_train_path = '../input/cleaned_y_train.pkl'
     
     processed_x_train_path = '../input/processed_x_train.pkl'
     processed_y_train_path = '../input/processed_y_train.pkl'
     processed_x_test_path = '../input/processed_x_test.pkl'
+    
+    glove_x_train_path = '../input/glove_x_train.pkl'
+    glove_y_train_path = '../input/processed_y_train.pkl'
+    glove_x_test_path = '../input/glove_x_test.pkl'
     
     outlierNameList = '../input/outlierNameList.pkl'
 

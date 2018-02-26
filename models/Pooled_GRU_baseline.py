@@ -85,7 +85,7 @@ def get_model():
 
 model = get_model()
 
-modelName = 'bSize'+str(batch_size)+'_epoch'+str(epochs)+'_PooledGRU'
+modelName = 'bSize'+str(batch_size)+'_epoch'+str(epochs)+'_PooledGRU_noStem'
 modelFile = os.path.join(conf.model_path, modelName)
 # file_path="weights_base.best.hdf5"
 file_path="checkpoints/"+modelName+'.hdf5'

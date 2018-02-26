@@ -197,4 +197,5 @@ class TextCleaner(object):
                 # print("inn")
                 j = repl[j]
             xx += j + " "
+        xx = re.sub('[^a-zA-Z ?!]+', '', xx.lower())
         return xx

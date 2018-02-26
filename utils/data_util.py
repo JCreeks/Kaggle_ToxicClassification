@@ -19,8 +19,8 @@ from conf.configure import Configure
 def max_len():
     return 500
 
-def load_dataset():
-    if not os.path.exists(Configure.processed_x_train_path):
+def load_dataset(processed_x_train_path=Configure.processed_x_train_path, processed_y_train_path=Configure.processed_y_train_path, processed_x_test_path=Configure.processed_x_test_path):
+    if not os.path.exists(processed_x_train_path):
         maxlen = max_len()
         with open(Configure.train_data_path, "rb") as f:
             train = pickle.load(f)
@@ -34,40 +34,40 @@ def load_dataset():
             test = pickle.load(f)
             x_test = sequence.pad_sequences(list_tokenized_test, maxlen=maxlen)
     else:
-        with open(Configure.processed_x_train_path, "rb") as f:
+        with open(processed_x_train_path, "rb") as f:
             x_train = pickle.load(f)
-        with open(Configure.processed_y_train_path, "rb") as f:
+        with open(processed_y_train_path, "rb") as f:
             y_train = pickle.load(f)
-        with open(Configure.processed_x_test_path, "rb") as f:
+        with open(processed_x_test_path, "rb") as f:
             x_test = pickle.load(f)
     
     print('x_train:', x_train.shape, ', y_train:', y_train.shape, ', x_test:', x_test.shape)
     return x_train, y_train, x_test
 
-def save_processed_dataset(x_train, y_train, x_test=None):
+def save_processed_dataset(x_train, y_train, x_test=None, processed_x_train_path=Configure.processed_x_train_path, processed_y_train_path=Configure.processed_y_train_path, processed_x_test_path=Configure.processed_x_test_path):
     if x_train is not None:
-        with open(Configure.processed_x_train_path, "wb") as f:
+        with open(processed_x_train_path, "wb") as f:
             pickle.dump(x_train, f, -1)
 #             cPickle.dump(x_train, f, -1)
             
     if y_train is not None:
-        with open(Configure.processed_y_train_path, "wb") as f:
+        with open(processed_y_train_path, "wb") as f:
             pickle.dump(y_train, f, -1)
 #             cPickle.dump(y_train, f, -1)
 
     if x_test is not None:
-        with open(Configure.processed_x_test_path, "wb") as f:
+        with open(processed_x_test_path, "wb") as f:
             pickle.dump(x_test, f, -1)
 #             cPickle.dump(x_test, f, -1)
 
-def save_embedding_matrix(embedding_matrix):
+def save_embedding_matrix(embedding_matrix, file_name=Configure.embedding_matrix):
     if embedding_matrix is not None:
-        with open(Configure.embedding_matrix, "wb") as f:
+        with open(file_name, "wb") as f:
             pickle.dump(embedding_matrix, f, -1)
             
-def load_embedding_matrix():
-    if os.path.exists(Configure.embedding_matrix):
-        with open(Configure.embedding_matrix, "rb") as f:
+def load_embedding_matrix(file_name=Configure.embedding_matrix):
+    if os.path.exists(file_name):
+        with open(file_name, "rb") as f:
             embedding_matrix = pickle.load(f)
         return embedding_matrix
     return None

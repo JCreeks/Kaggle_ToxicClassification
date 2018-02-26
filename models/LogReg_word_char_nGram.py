@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import os
+import sys
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -8,8 +10,17 @@ from scipy.sparse import hstack
 from scipy.special import logit, expit
 from tqdm import tqdm
 
-from configure import Configure as conf
+# from configure import Configure as conf
+module_path = os.path.abspath(os.path.join('..'))
+sys.path.append(module_path)
 
+from conf.configure import Configure as conf
+from utils.clean_util import TextCleaner
+
+CLEAN = True
+print('##############')
+print('clean: ', CLEAN)
+print('##############')
 class_names = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
 
 train = pd.read_csv('../input/train.csv').fillna(' ')
@@ -17,6 +28,9 @@ test = pd.read_csv('../input/test.csv').fillna(' ')
 
 train_text = train['comment_text']
 test_text = test['comment_text']
+if CLEAN:
+    train_text = train_text.apply(TextCleaner.clean_text2)
+    test_text = test_text.apply(TextCleaner.clean_text2)
 all_text = pd.concat([train_text, test_text])
 
 print('word2vec...')
@@ -35,7 +49,7 @@ char_vectorizer = TfidfVectorizer(
     sublinear_tf=True,
     strip_accents='unicode',
     analyzer='char',
-    ngram_range=(1, 5),
+    ngram_range=(2, 6),#ngram_range=(1, 5), 
     max_features=20000)
 char_vectorizer.fit(all_text)
 train_char_features = char_vectorizer.transform(train_text)
