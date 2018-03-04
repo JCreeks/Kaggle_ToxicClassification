@@ -143,6 +143,7 @@ def score(params):
         predictions = gbm_model.predict(dvalid, ntree_limit=gbm_model.best_iteration)
         score += roc_auc_score(valid_l[j], np.array(predictions))
     score /= 6.
+    print( params )
     print('score: ', score)
     loss = - score
     return loss #{'loss': loss, 'status': STATUS_OK}

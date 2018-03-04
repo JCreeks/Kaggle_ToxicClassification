@@ -2,6 +2,9 @@ from sklearn.metrics import log_loss, roc_auc_score
 from sklearn.model_selection import train_test_split
 
 import numpy as np
+import pdb
+
+import pickle
 
 
 def _train_model(model, batch_size, train_x, train_y, val_x, val_y, metric = roc_auc_score):
@@ -13,16 +16,31 @@ def _train_model(model, batch_size, train_x, train_y, val_x, val_y, metric = roc
     current_epoch = 0
 
     while True:
-        model.fit(train_x, train_y, batch_size=batch_size, epochs=current_epoch)
+        model.fit(train_x, train_y, batch_size=batch_size, epochs=current_epoch, verbose=2)#current_epoch
         y_pred = model.predict(val_x, batch_size=batch_size)
 
         total_loss = 0
+        count = 0.
         for j in range(6):
-            loss = log_loss(val_y[:, j], y_pred[:, j])
-            total_loss += loss
+            loss = log_loss(val_y[:, j], y_pred[:, j], eps=1e-7)
+            if not np.isnan(loss):
+                total_loss += loss
+                count +=1.
 
-        total_loss /= 6.
+        total_loss /= count
         
+#         if np.isnan(total_loss):
+#             print('y_pred shape: ', y_pred.shape)
+#             print('val_y shape: ', val_y.shape)
+#             print("# nan in y_pred: ", np.count_nonzero(np.isnan(y_pred)))
+#             print("# nan in val_y: ", np.count_nonzero(np.isnan(val_y)))
+# #             pdb.set_trace()
+# #             print(y_pred)
+# #             with open('../ensemble/y_pred.pkl', "wb") as f:
+# #                 pickle.dump(y_pred, f, -1)
+#             np.save('../ensemble/y_pred.npy', y_pred)
+#             np.save('../ensemble/val_y.npy', val_y)
+        print('count: ', count)
         print("Epoch {0} loss {1} best_loss {2}".format(current_epoch, total_loss, best_loss))
 
         current_epoch += 1
