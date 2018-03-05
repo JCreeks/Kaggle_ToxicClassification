@@ -38,6 +38,10 @@ class Configure(object):
     glove_y_train_path = '../input/processed_y_train.pkl'
     glove_x_test_path = '../input/glove_x_test.pkl'
     
+    wordChar_x_train_path = '../input/wordChar_x_train.pkl'
+    wordChar_y_train_path = '../input/processed_y_train.pkl'
+    wordChar_x_test_path = '../input/wordChar_x_test.pkl'
+    
     outlierNameList = '../input/outlierNameList.pkl'
 
     submission_path = '../output/submission_{}.csv'.format(time.strftime('%Y_%m_%d_%H_%M_%S', time.localtime(time.time())))

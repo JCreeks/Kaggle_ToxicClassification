@@ -19,6 +19,12 @@ from conf.configure import Configure
 def max_len():
     return 500
 
+def cleanGLove():
+    return True
+
+def cleanWordChar():
+    return True
+
 def load_dataset(processed_x_train_path=Configure.processed_x_train_path, processed_y_train_path=Configure.processed_y_train_path, processed_x_test_path=Configure.processed_x_test_path):
     if not os.path.exists(processed_x_train_path):
         maxlen = max_len()
