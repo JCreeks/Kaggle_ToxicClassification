@@ -5,7 +5,7 @@ import sys, os, re, csv, codecs, numpy as np, pandas as pd
 np.random.seed(32)
 os.environ["OMP_NUM_THREADS"] = "4"
 from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
+from keras.preprocessing.sequence import pad_sequencesgru
 from keras.layers import Dense, Input, LSTM, Embedding, Dropout, Activation, Conv1D
 from keras.layers import Bidirectional, GlobalMaxPool1D, MaxPooling1D, Add, Flatten
 from keras.layers import GlobalAveragePooling1D, GlobalMaxPooling1D, concatenate, SpatialDropout1D

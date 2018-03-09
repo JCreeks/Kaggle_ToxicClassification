@@ -8,7 +8,7 @@ import pickle
 
 
 def _train_model(model, batch_size, train_x, train_y, val_x, val_y, metric = roc_auc_score):
-    best_loss = -1
+    best_score = 2
     best_weights = None
     best_epoch = 0
     best_y_pred = val_y
@@ -19,48 +19,40 @@ def _train_model(model, batch_size, train_x, train_y, val_x, val_y, metric = roc
         model.fit(train_x, train_y, batch_size=batch_size, epochs=current_epoch, verbose=2)#current_epoch
         y_pred = model.predict(val_x, batch_size=batch_size)
 
-        total_loss = 0
+        total_score = 0
         count = 0.
         for j in range(6):
-            loss = log_loss(val_y[:, j], y_pred[:, j], eps=1e-7)
-            if not np.isnan(loss):
-                total_loss += loss
+#             loss = log_loss(val_y[:, j], y_pred[:, j], eps=1e-7)
+            score = metric(val_y[:, j], y_pred[:, j])
+            if not np.isnan(score):
+                total_score += score
                 count +=1.
 
-        total_loss /= count
+        total_score /= count
         
-#         if np.isnan(total_loss):
-#             print('y_pred shape: ', y_pred.shape)
-#             print('val_y shape: ', val_y.shape)
-#             print("# nan in y_pred: ", np.count_nonzero(np.isnan(y_pred)))
-#             print("# nan in val_y: ", np.count_nonzero(np.isnan(val_y)))
-# #             pdb.set_trace()
-# #             print(y_pred)
-# #             with open('../ensemble/y_pred.pkl', "wb") as f:
-# #                 pickle.dump(y_pred, f, -1)
-#             np.save('../ensemble/y_pred.npy', y_pred)
-#             np.save('../ensemble/val_y.npy', val_y)
         print('count: ', count)
-        print("Epoch {0} loss {1} best_loss {2}".format(current_epoch, total_loss, best_loss))
+        print("Epoch {0} score {1} best_score {2}".format(current_epoch, total_score, best_score))
 
         current_epoch += 1
-        if total_loss < best_loss or best_loss == -1:
-            best_loss = total_loss
+#         if total_loss < best_loss or best_loss == -1:
+        if total_score > best_score or best_score == 2:
+            best_score = total_score
             best_weights = model.get_weights()
             best_epoch = current_epoch
-            best_y_pred = y_pred
+#             best_y_pred = y_pred
+#             break
         else:
-            if current_epoch - best_epoch == 5:
+            if current_epoch - best_epoch == 3:
                 break
 
     model.set_weights(best_weights)
-    total_score = 0
-    for j in range(6):
-        score = metric(val_y[:, j], best_y_pred[:, j])
-        total_score += score
-    total_score /= 6.
+#     total_score = 0
+#     for j in range(6):
+#         score = metric(val_y[:, j], best_y_pred[:, j])
+#         total_score += score
+#     total_score /= 6.
     print('###################')
-    print("score: {}".format(score))
+    print("best score: {}".format(best_score))
     print('###################')
     
     return model

@@ -42,6 +42,10 @@ class Configure(object):
     wordChar_y_train_path = '../input/processed_y_train.pkl'
     wordChar_x_test_path = '../input/wordChar_x_test.pkl'
     
+    clean_wordChar_x_train_path = '../input/clean_wordChar_x_train.pkl'
+    clean_wordChar_y_train_path = '../input/processed_y_train.pkl'
+    clean_wordChar_x_test_path = '../input/clean_wordChar_x_test.pkl'
+    
     outlierNameList = '../input/outlierNameList.pkl'
 
     submission_path = '../output/submission_{}.csv'.format(time.strftime('%Y_%m_%d_%H_%M_%S', time.localtime(time.time())))
