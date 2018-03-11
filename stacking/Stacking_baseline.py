@@ -59,15 +59,15 @@ def uppercase_freq(x):
 Import submission and OOF files
 """
 def get_subs(nums):
-    subs = np.hstack([np.array(pd.read_csv("../input/trained-models/sub" + str(num) + ".csv")[LABELS]) for num in subnums])
-    oofs = np.hstack([np.array(pd.read_csv("../input/trained-models/oof" + str(num) + ".csv")[LABELS]) for num in subnums])
+    subs = np.hstack([np.array(pd.read_csv("../output/trained_models/sub" + str(num) + ".csv")[LABELS]) for num in subnums])
+    oofs = np.hstack([np.array(pd.read_csv("../output/trained_models/oof" + str(num) + ".csv")[LABELS]) for num in subnums])
     return subs, oofs
 
 if __name__ == "__main__":
     
-    train = pd.read_csv('../input/jigsaw-toxic-comment-classification-challenge/train.csv').fillna(' ')
-    test = pd.read_csv('../input/jigsaw-toxic-comment-classification-challenge/test.csv').fillna(' ')
-    sub = pd.read_csv('../input/jigsaw-toxic-comment-classification-challenge/sample_submission.csv')
+    train = pd.read_csv('../input/train.csv').fillna(' ')
+    test = pd.read_csv('../input/test.csv').fillna(' ')
+    sub = pd.read_csv('../input/sample_submission.csv')
     INPUT_COLUMN = "comment_text"
     LABELS = train.columns[2:]
     

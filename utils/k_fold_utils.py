@@ -16,7 +16,7 @@ def _train_model(model, batch_size, train_x, train_y, val_x, val_y, metric = roc
     current_epoch = 0
 
     while True:
-        model.fit(train_x, train_y, batch_size=batch_size, epochs=current_epoch, verbose=2)#current_epoch
+        model.fit(train_x, train_y, batch_size=batch_size, epochs=1, verbose=2)#current_epoch
         y_pred = model.predict(val_x, batch_size=batch_size)
 
         total_score = 0
@@ -108,7 +108,6 @@ def train_meta_prob_val(X, y, fold_count, batch_size, get_model_func):
 def train_meta_prob(X, y, fold_count, model):
     trained_y = y
     fold_size = len(X) // fold_count
-    models = []
     for fold_id in range(0, fold_count):
         print("training fold: ", fold_id)
         fold_start = fold_size * fold_id
