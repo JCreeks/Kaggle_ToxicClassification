@@ -7,7 +7,10 @@ warnings.filterwarnings(action='ignore', category=DeprecationWarning, module='sk
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score
 
+module_path = os.path.abspath(os.path.join('..'))
+sys.path.append(module_path)
 
+from conf.configure import Configure as conf
 #######################
 # FEATURE ENGINEERING #
 #######################
@@ -100,4 +103,4 @@ if __name__ == "__main__":
         sub[label] = stacker.predict_proba(X_test)[:,1]
     print("CV score:", np.mean(scores))
     
-    sub.to_csv("submission.csv", index=False)
+    sub.to_csv(conf.submission_path, index=False)
