@@ -38,7 +38,7 @@ from keras import backend as K
 from keras.engine import InputSpec, Layer
 from keras.optimizers import Adam, RMSprop
 from keras.callbacks import EarlyStopping, ModelCheckpoint, LearningRateScheduler
-from keras.layers import GRU, BatchNormalization, Conv1D, MaxPooling1D
+from keras.layers import GRU, CuDNNGRU, BatchNormalization, Conv1D, MaxPooling1D
 
 maxlen = max_len()
 batch_size = 256
@@ -139,8 +139,8 @@ def get_model():
     
     embed_layer = SpatialDropout1D(rate_drop_dense)(embed_layer)
 
-    x = Bidirectional(
-        GRU(gru_len, activation='relu', dropout=dropout_p, recurrent_dropout=dropout_p, return_sequences=True))(
+    #x = Bidirectional(CuDNNGRU(gru_len, return_sequences=True))(embed_layer)
+    x = Bidirectional(GRU(gru_len, activation='relu', dropout=dropout_p, recurrent_dropout=dropout_p, return_sequences=True))(
         embed_layer)
     capsule = Capsule(num_capsule=Num_capsule, dim_capsule=Dim_capsule, routings=Routings,
                       share_weights=True)(x)
