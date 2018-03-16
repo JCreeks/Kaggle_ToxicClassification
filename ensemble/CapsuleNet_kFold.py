@@ -58,6 +58,7 @@ Dim_capsule = 16
 dropout_p = 0.25
 rate_drop_dense = 0.28
 
+'''
 def squash(x, axis=-1):
     # s_squared_norm is really small
     # s_squared_norm = K.sum(K.square(x), axis, keepdims=True) + K.epsilon()
@@ -170,6 +171,17 @@ for fold_id, model in enumerate(models):
     test_predicts = model.predict(x_test, batch_size=batch_size)
     test_predicts_list.append(test_predicts)
     np.save(test_predicts_path, test_predicts)
+
+'''
+#####################
+test_predicts_list = []
+for fold_id in range(fold_count):
+    test_predicts_path = os.path.join(conf.output_path, "CapsuleNet_predicts{0}.npy".format(fold_id))
+    if os.path.exists(test_predicts_path):
+        test_predicts = np.load(test_predicts_path)
+        test_predicts_list.append(test_predicts)
+        continue
+#####################
 
 test_predicts = np.ones(test_predicts_list[0].shape)
 for fold_predict in test_predicts_list:
