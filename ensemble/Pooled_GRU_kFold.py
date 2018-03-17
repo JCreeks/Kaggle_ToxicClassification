@@ -142,9 +142,9 @@ test_predicts **= (1. / len(test_predicts_list))
 
 sample_submission = pd.read_csv("../input/sample_submission.csv")
 sample_submission[list_classes] = test_predicts
-sample_submission.to_csv("../output/trained_models/sub0.csv", index=False)
+sample_submission.to_csv("../output/trained_models/sub1.csv", index=False)
 
 sample_submission = pd.read_csv("../input/train.csv")
 sample_submission[list_classes] = trained_y
-sample_submission.to_csv("../output/trained_models/oof0.csv", index=False)
+sample_submission.to_csv("../output/trained_models/oof1.csv", index=False)
 
