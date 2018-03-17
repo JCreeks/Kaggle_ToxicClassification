@@ -22,8 +22,7 @@ from sklearn.metrics import roc_auc_score
 def AUC(y_true, y_pred):
     return roc_auc_score(y_pred)
 
-# Input data files are available in the "../input/" directory.
-# For example, running this (by clicking run or pressing Shift+Enter) will list the files in the input directory
+fold_count = 3
 
 from subprocess import check_output
 # print(check_output(["ls", "../input"]).decode("utf8"))
@@ -39,18 +38,12 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.layers import Bidirectional, Dropout
 from keras.models import Model
 from keras.optimizers import RMSprop
+import h5py
 
 list_classes = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
 X, y, x_test = data_util.load_dataset()
 # embedding_matrix = data_util.load_embedding_matrix()
 del x_test
-
-# maxlen = max_len()
-# batch_size = 256
-# dropout_rate = .3
-# recurrent_units = 64
-# dense_size = 32
-# fold_count = 3
 
 get_model_func = lambda: GRU_get_model(
         **GRU_params())
@@ -70,7 +63,13 @@ for fold_id in range(0, fold_count):
 
     model = get_model_func()
     
-    model_path = os.path.join(conf.model_path, "model{0}_weights.npy".format(fold_id))
+#     model_path = os.path.join(conf.model_path, "model{0}_weights.npy".format(fold_id))
+#     weights_npy = np.load(model_path)
+#     hf = h5py.File(os.path.join(conf.model_path, "model{0}_weights.h5".format(fold_id)), 'w')
+#     hf.create_dataset('dataset_1', data=weights_npy)
+#     hf.close()
+    
+    model_path = os.path.join(conf.model_path, "model{0}_weights.h5".format(fold_id))
     model.load_weights(model_path)
 
     trained_y[fold_start:fold_end] = model.predict(test_x)
@@ -78,6 +77,6 @@ for fold_id in range(0, fold_count):
 sub = pd.read_csv('../input/sample_submission.csv')
 INPUT_COLUMN = "comment_text"
 LABELS = sub.columns[1:]
-test_predicts_path = os.path.join(conf.output_path, "GRU_train_predicts_{}fold.csv".format(fold_count))
+test_predicts_path = "../output/trained_models/oof0.csv"
 sub[LABELS] = trained_y 
 sub.to_csv(test_predicts_path, index=False)

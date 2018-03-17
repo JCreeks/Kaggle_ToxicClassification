@@ -16,7 +16,7 @@ def _train_model(model, batch_size, train_x, train_y, val_x, val_y, metric = roc
     current_epoch = 0
 
     while True:
-        model.fit(train_x, train_y, batch_size=batch_size, epochs=1, verbose=2)#current_epoch
+        model.fit(train_x, train_y, batch_size=batch_size, epochs=0, verbose=2)#current_epoch
         y_pred = model.predict(val_x, batch_size=batch_size)
 
         total_score = 0
@@ -40,7 +40,7 @@ def _train_model(model, batch_size, train_x, train_y, val_x, val_y, metric = roc
             best_weights = model.get_weights()
             best_epoch = current_epoch
 #             best_y_pred = y_pred
-#             break
+            break
         else:
             if current_epoch - best_epoch == 3:
                 break
