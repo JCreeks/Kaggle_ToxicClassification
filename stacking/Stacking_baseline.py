@@ -4,14 +4,25 @@ import re
 import os, sys
 import lightgbm as lgb
 import warnings
-warnings.filterwarnings(action='ignore', category=DeprecationWarning, module='sklearn')
+import warnings
+warnings.filterwarnings('ignore')
+# warnings.filterwarnings(action='ignore', category=DeprecationWarning, module='sklearn')
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import Ridge, Lasso
+from sklearn.metrics import make_scorer, mean_squared_error, auc
+AUC = make_scorer(auc, greater_is_better=True)
+from sklearn.grid_search import GridSearchCV
+from sklearn.linear_model import LassoCV
 
 module_path = os.path.abspath(os.path.join('..'))
 sys.path.append(module_path)
 
 from conf.configure import Configure as conf
+from utils.model_wrapper import GridCVWrapper
+from sklearn.ensemble import RandomForestClassifier
+
+LABELS = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
 #######################
 # FEATURE ENGINEERING #
 #######################
@@ -69,18 +80,20 @@ def get_subs(nums):
 
 if __name__ == "__main__":
     
+    subnums = [0,1,8,91,10]
+    subs, oofs = get_subs(subnums)
+    
     train = pd.read_csv('../input/train.csv').fillna(' ')
     test = pd.read_csv('../input/test.csv').fillna(' ')
     sub = pd.read_csv('../input/sample_submission.csv')
     INPUT_COLUMN = "comment_text"
-    LABELS = train.columns[2:]
+    #LABELS = train.columns[2:]
+    SEED = 2018
     
     # Import submissions and OOF files
     # 29: LightGBM trained on Fasttext (CV: 0.9765, LB: 0.9620)
     # 51: Logistic regression with word and char n-grams (CV: 0.9858, LB: ?)
     # 52: LSTM trained on Fasttext (CV: ?, LB: 0.9851)
-    subnums = [0,1,8,91,10]
-    subs, oofs = get_subs(subnums)
     
     # Engineer features
     feature_functions = [len, asterix_freq, uppercase_freq]
@@ -89,9 +102,13 @@ if __name__ == "__main__":
     F_test = engineer_features(test[INPUT_COLUMN], feature_functions)
     
     X_train = np.hstack([F_train[features].as_matrix(), oofs])
-    X_test = np.hstack([F_test[features].as_matrix(), subs])    
+    X_test = np.hstack([F_test[features].as_matrix(), subs])   
+#     X_train = oofs
+#     X_test = subs 
 
-    stacker = lgb.LGBMClassifier(max_depth=3, metric="auc", n_estimators=125, num_leaves=10, boosting_type="gbdt", learning_rate=0.1, feature_fraction=0.45, colsample_bytree=0.45, bagging_fraction=0.8, bagging_freq=5, reg_lambda=0.2)
+#     stacker = lgb.LGBMClassifier(max_depth=3, metric="auc", n_estimators=125, num_leaves=10, boosting_type="gbdt", learning_rate=0.1, feature_fraction=0.45, colsample_bytree=0.45, bagging_fraction=0.8, bagging_freq=5, reg_lambda=0.2, silent=True)
+
+    stacker = RandomForestClassifier()
     
     # Fit and submit
     scores = []
@@ -104,4 +121,4 @@ if __name__ == "__main__":
         sub[label] = stacker.predict_proba(X_test)[:,1]
     print("CV score:", np.mean(scores))
     
-    sub.to_csv(conf.submission_path, index=False)
+    #sub.to_csv(conf.submission_path, index=False)
