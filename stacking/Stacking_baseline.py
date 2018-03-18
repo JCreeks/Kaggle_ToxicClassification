@@ -80,7 +80,7 @@ def get_subs(nums):
 
 if __name__ == "__main__":
     
-    subnums = [0,1,8,91,10]
+    subnums = [0,1,8,91]#,10
     subs, oofs = get_subs(subnums)
     
     train = pd.read_csv('../input/train.csv').fillna(' ')
@@ -123,4 +123,4 @@ if __name__ == "__main__":
         sub[label] = stacker.predict_proba(X_test)[:,1]
     print("CV score:", np.mean(scores))
     
-    #sub.to_csv(conf.submission_path, index=False)
+    sub.to_csv(conf.submission_path, index=False)
