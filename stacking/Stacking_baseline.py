@@ -105,10 +105,12 @@ if __name__ == "__main__":
     X_test = np.hstack([F_test[features].as_matrix(), subs])   
 #     X_train = oofs
 #     X_test = subs 
+#     X_train = np.hstack([F_train[features].as_matrix()])
+#     X_test = np.hstack([F_test[features].as_matrix()]) 
 
-#     stacker = lgb.LGBMClassifier(max_depth=3, metric="auc", n_estimators=125, num_leaves=10, boosting_type="gbdt", learning_rate=0.1, feature_fraction=0.45, colsample_bytree=0.45, bagging_fraction=0.8, bagging_freq=5, reg_lambda=0.2, silent=True)
+    stacker = lgb.LGBMClassifier(max_depth=3, metric="auc", n_estimators=125, num_leaves=10, boosting_type="gbdt", learning_rate=0.1, feature_fraction=0.45, colsample_bytree=0.45, bagging_fraction=0.8, bagging_freq=5, reg_lambda=0.2, verbose=-1)
 
-    stacker = RandomForestClassifier()
+#     stacker = RandomForestClassifier(max_depth=3,n_estimators=125)
     
     # Fit and submit
     scores = []

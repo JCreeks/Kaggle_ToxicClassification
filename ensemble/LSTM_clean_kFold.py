@@ -42,7 +42,7 @@ fold_count = 3
 
 # X_train, y_train, X_test = data_util.load_dataset(processed_x_train_path=conf.glove_x_train_path, processed_y_train_path=conf.glove_y_train_path, processed_x_test_path=conf.glove_x_test_path)
 
-
+list_classes = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
 x_train, y_train, x_test = data_util.load_dataset()
 
 # embedding_matrix = data_util.load_embedding_matrix(file_name=conf.glove_matrix)
