@@ -1,6 +1,7 @@
-mport pandas as pd
+import pandas as pd
 import numpy as np
 import re
+import os, sys
 import lightgbm as lgb
 import warnings
 warnings.filterwarnings(action='ignore', category=DeprecationWarning, module='sklearn')
@@ -78,7 +79,7 @@ if __name__ == "__main__":
     # 29: LightGBM trained on Fasttext (CV: 0.9765, LB: 0.9620)
     # 51: Logistic regression with word and char n-grams (CV: 0.9858, LB: ?)
     # 52: LSTM trained on Fasttext (CV: ?, LB: 0.9851)
-    subnums = [29,51,52]
+    subnums = [0,1,8,91,10]
     subs, oofs = get_subs(subnums)
     
     # Engineer features
