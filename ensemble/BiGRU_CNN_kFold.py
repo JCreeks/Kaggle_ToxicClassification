@@ -114,7 +114,7 @@ sample_submission.to_csv(conf.submission_path, index=False)
 
 print("Predicting results...")
 test_predicts_list = []
-trained_y = y_train
+trained_y = y_train.astype(np.float32)
 fold_size = len(x_train) // fold_count
 for fold_id, model in enumerate(models):
 #     model_path = os.path.join(conf.model_path, "model{0}_weights.h5".format(fold_id))
@@ -132,7 +132,7 @@ for fold_id, model in enumerate(models):
         fold_end = len(X)
 
     test_x = x_train[fold_start:fold_end]
-    trained_y[fold_start:fold_end] = model.predict(test_x)
+    trained_y[fold_start:fold_end] = model.predict(test_x, batch_size=batch_size)
 
 test_predicts = np.ones(test_predicts_list[0].shape)
 for fold_predict in test_predicts_list:

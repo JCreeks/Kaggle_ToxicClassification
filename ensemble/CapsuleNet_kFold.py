@@ -58,7 +58,7 @@ Dim_capsule = 16
 dropout_p = 0.25
 rate_drop_dense = 0.28
 
-'''
+
 def squash(x, axis=-1):
     # s_squared_norm is really small
     # s_squared_norm = K.sum(K.square(x), axis, keepdims=True) + K.epsilon()
@@ -161,6 +161,7 @@ get_model_func = lambda: get_model()
 print("Starting to train models...")
 models = train_folds(x_train, y_train, fold_count, batch_size, get_model_func)
 
+'''
 print("Predicting results...")
 test_predicts_list = []
 for fold_id, model in enumerate(models):
@@ -171,6 +172,8 @@ for fold_id, model in enumerate(models):
     test_predicts = model.predict(x_test, batch_size=batch_size)
     test_predicts_list.append(test_predicts)
     np.save(test_predicts_path, test_predicts)
+
+'''
 
 '''
 #####################
@@ -195,3 +198,40 @@ sample_submission = pd.read_csv("../input/sample_submission.csv")
 sample_submission[list_classes] = test_predicts
 
 sample_submission.to_csv(conf.submission_path, index=False)
+'''
+
+print("Predicting results...")
+test_predicts_list = []
+trained_y = y_train
+fold_size = len(x_train) // fold_count
+for fold_id, model in enumerate(models):
+#     model_path = os.path.join(conf.model_path, "model{0}_weights.h5".format(fold_id))
+#     model.get_weights(model_path)
+
+    test_predicts_path = os.path.join(conf.output_path, "test_predicts{0}.npy".format(fold_id))
+    test_predicts = model.predict(x_test, batch_size=batch_size)
+    test_predicts_list.append(test_predicts)
+    np.save(test_predicts_path, test_predicts)
+    
+    print("training fold: ", fold_id)
+    fold_start = fold_size * fold_id
+    fold_end = fold_start + fold_size
+    if fold_id == fold_size - 1:
+        fold_end = len(X)
+
+    test_x = x_train[fold_start:fold_end]
+    trained_y[fold_start:fold_end] = model.predict(test_x)
+
+test_predicts = np.ones(test_predicts_list[0].shape)
+for fold_predict in test_predicts_list:
+    test_predicts *= fold_predict
+
+test_predicts **= (1. / len(test_predicts_list))
+
+sample_submission = pd.read_csv("../input/sample_submission.csv")
+sample_submission[list_classes] = test_predicts
+sample_submission.to_csv("../output/trained_models/sub5.csv", index=False)
+
+sample_submission = pd.read_csv("../input/train.csv")
+sample_submission[list_classes] = trained_y
+sample_submission.to_csv("../output/trained_models/oof5.csv", index=False)

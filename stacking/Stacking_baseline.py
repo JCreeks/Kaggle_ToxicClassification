@@ -73,15 +73,14 @@ def uppercase_freq(x):
 """
 Import submission and OOF files
 """
-def get_subs(nums):
-    subs = np.hstack([np.array(pd.read_csv("../output/trained_models/sub" + str(num) + ".csv")[LABELS]) for num in subnums])
-    oofs = np.hstack([np.array(pd.read_csv("../output/trained_models/oof" + str(num) + ".csv")[LABELS]) for num in subnums])
+def get_subs(nums, L = LABELS):
+    subs = np.hstack([np.array(pd.read_csv("../output/trained_models/sub" + str(num) + ".csv")[L]) for num in subnums])
+    oofs = np.hstack([np.array(pd.read_csv("../output/trained_models/oof" + str(num) + ".csv")[L]) for num in subnums])
     return subs, oofs
 
 if __name__ == "__main__":
     
-    subnums = [0,1,8,91]#,10
-    subs, oofs = get_subs(subnums)
+    subnums = [0,1,2,3,4]#,10
     
     train = pd.read_csv('../input/train.csv').fillna(' ')
     test = pd.read_csv('../input/test.csv').fillna(' ')
@@ -101,10 +100,11 @@ if __name__ == "__main__":
     F_train = engineer_features(train[INPUT_COLUMN], feature_functions)
     F_test = engineer_features(test[INPUT_COLUMN], feature_functions)
     
-    X_train = np.hstack([F_train[features].as_matrix(), oofs])
-    X_test = np.hstack([F_test[features].as_matrix(), subs])   
-#     X_train = oofs
-#     X_test = subs 
+    subs, oofs = get_subs(subnums)
+#     X_train = np.hstack([F_train[features].as_matrix(), oofs])
+#     X_test = np.hstack([F_test[features].as_matrix(), subs])   
+    X_train = oofs
+    X_test = subs 
 #     X_train = np.hstack([F_train[features].as_matrix()])
 #     X_test = np.hstack([F_test[features].as_matrix()]) 
 
@@ -116,6 +116,11 @@ if __name__ == "__main__":
     scores = []
     for label in LABELS:
         print(label)
+#         subs, oofs = get_subs(subnums, L=[label])
+#         X_train = np.hstack([F_train[features].as_matrix(), oofs])
+#         X_test = np.hstack([F_test[features].as_matrix(), subs])   
+#         X_train = oofs
+#         X_test = subs
         score = cross_val_score(stacker, X_train, train[label], cv=5, scoring='roc_auc')
         print("AUC:", score)
         scores.append(np.mean(score))
@@ -123,4 +128,4 @@ if __name__ == "__main__":
         sub[label] = stacker.predict_proba(X_test)[:,1]
     print("CV score:", np.mean(scores))
     
-    sub.to_csv(conf.submission_path, index=False)
+#     sub.to_csv(conf.submission_path, index=False)
