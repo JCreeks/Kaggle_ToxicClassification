@@ -1,4 +1,4 @@
-mport time
+import time
 start_time = time.time()
 from sklearn.model_selection import train_test_split
 import sys, os, re, csv, codecs, numpy as np, pandas as pd
